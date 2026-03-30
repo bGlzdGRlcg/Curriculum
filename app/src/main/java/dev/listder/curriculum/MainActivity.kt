@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         settings.useWideViewPort = true
         settings.loadWithOverviewMode = true
         settings.cacheMode = WebSettings.LOAD_DEFAULT
-        settings.userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        settings.userAgentString = "Chrome"
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
 
         webView.addJavascriptInterface(SessionBridge(), "AndroidBridge")
@@ -75,6 +75,16 @@ class MainActivity : AppCompatActivity() {
                 CookieManager.getInstance().flush()
             }
 
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                if (errorResponse?.statusCode == 500) {
+                    view?.loadUrl("https://jwm.mzwu.edu.cn/#/login")
+                }
+            }
+
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
@@ -102,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         WebView.setWebContentsDebuggingEnabled(true)
-        webView.loadUrl("https://jwm.mzwu.edu.cn/#/new/Home")
+        webView.loadUrl("https://jwm.mzwu.edu.cn/#/new/Table")
     }
 
     private fun setupFullScreen() {
